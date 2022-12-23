@@ -26,6 +26,6 @@ export const permissions = shield({
     workoutById: rules.isAuthenticatedUser,
   },
   Mutation: {
-    deletePost: rules.isWorkoutOwner,
+    deleteWorkout: rules.isWorkoutOwner,
   },
 })
