@@ -9,7 +9,7 @@ const rules = {
   }),
   isWorkoutOwner: rule()(async (_parent, args, context) => {
     const userId = getUserId(context)
-    const author = await context.prisma.post
+    const author = await context.prisma.workout
       .findUnique({
         where: {
           id: Number(args.id),

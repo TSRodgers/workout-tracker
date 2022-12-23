@@ -118,6 +118,58 @@ const Mutation = objectType({
         })
       },
     })
+
+    t.field('createWorkout', {
+      type: 'Workout',
+      args: {
+        title: nonNull(stringArg())
+      },
+      resolve: (_, args, context: Context) => {
+        const userId = getUserId(context)
+        return context.prisma.workout.create({
+          data: {
+            title: args.title,
+            authorId: userId,
+          },
+        })
+      },
+    })
+
+    t.field('createExercise', {
+      type: 'Exercise',
+      args: {
+        id: nonNull(intArg()),
+        title: stringArg(),
+        weight: nonNull(intArg()),
+        reps: nonNull(intArg()),
+        sets: nonNull(intArg()),
+      },
+      resolve: (parent, args, context: Context) => {
+        const userId = getUserId(context)
+        if (!userId) throw new Error('Could not authenticate user.')
+        return context.prisma.exercise.create({
+          data: {
+            title: args.title,
+            weight: args.weight,
+            reps: args.reps,
+            sets: args.sets,
+            parent: {connect: { id: Number(args.id) } }
+          }
+        })
+      }
+    })
+
+    t.field('deleteExercise', {
+      type: 'Exercise',
+      args: {
+        id: nonNull(intArg()),
+      },
+      resolve: (_, args, context: Context) => {
+        return context.prisma.exercise.delete({
+          where: { id: args.id },
+        })
+      },
+    })
   },
 })
 
@@ -150,11 +202,11 @@ const Workout = objectType({
     t.nonNull.list.nonNull.field('exercises', {
       type: 'Exercise',
       resolve: (parent, _, context: Context) => {
-        return context.prisma.user
+        return context.prisma.workout
           .findUnique({
             where: { id: parent.id || undefined },
           })
-          .workouts()
+          .exercises()
       },
     })
     t.nonNull.boolean('published')
@@ -175,6 +227,7 @@ const Workout = objectType({
 const Exercise = objectType({
   name: 'Exercise',
   definition(t) {
+    t.nonNull.string('title')
     t.nonNull.int('id')
     t.nonNull.int('reps')
     t.nonNull.int('sets')
@@ -209,7 +262,6 @@ const WorkoutCreateInput = inputObjectType({
   name: 'WorkoutCreateInput',
   definition(t) {
     t.nonNull.string('title')
-    t.string('content')
   },
 })
 

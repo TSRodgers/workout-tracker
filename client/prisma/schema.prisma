@@ -27,6 +27,7 @@ model Workout {
 
 model Exercise {
   id       Int     @id @default(autoincrement())
+  title String?
   reps     Int
   sets     Int
   weight   Int

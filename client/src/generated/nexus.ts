@@ -39,7 +39,6 @@ export interface NexusGenInputs {
     id?: number | null; // Int
   }
   WorkoutCreateInput: { // input type
-    content?: string | null; // String
     title: string; // String!
   }
 }
@@ -66,6 +65,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     reps: number; // Int!
     sets: number; // Int!
+    title: string; // String!
     weight: number; // Int!
   }
   Mutation: {};
@@ -105,9 +105,13 @@ export interface NexusGenFieldTypes {
     parent: NexusGenRootTypes['Workout'] | null; // Workout
     reps: number; // Int!
     sets: number; // Int!
+    title: string; // String!
     weight: number; // Int!
   }
   Mutation: { // field return type
+    createExercise: NexusGenRootTypes['Exercise'] | null; // Exercise
+    createWorkout: NexusGenRootTypes['Workout'] | null; // Workout
+    deleteExercise: NexusGenRootTypes['Exercise'] | null; // Exercise
     deleteWorkout: NexusGenRootTypes['Workout'] | null; // Workout
     login: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
@@ -145,9 +149,13 @@ export interface NexusGenFieldTypeNames {
     parent: 'Workout'
     reps: 'Int'
     sets: 'Int'
+    title: 'String'
     weight: 'Int'
   }
   Mutation: { // field return type name
+    createExercise: 'Exercise'
+    createWorkout: 'Workout'
+    deleteExercise: 'Exercise'
     deleteWorkout: 'Workout'
     login: 'AuthPayload'
     signup: 'AuthPayload'
@@ -177,6 +185,19 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createExercise: { // args
+      id: number; // Int!
+      reps: number; // Int!
+      sets: number; // Int!
+      title?: string | null; // String
+      weight: number; // Int!
+    }
+    createWorkout: { // args
+      title: string; // String!
+    }
+    deleteExercise: { // args
+      id: number; // Int!
+    }
     deleteWorkout: { // args
       id: number; // Int!
     }

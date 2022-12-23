@@ -17,10 +17,14 @@ type Exercise {
   parent: Workout
   reps: Int!
   sets: Int!
+  title: String!
   weight: Int!
 }
 
 type Mutation {
+  createExercise(id: Int!, reps: Int!, sets: Int!, title: String, weight: Int!): Exercise
+  createWorkout(title: String!): Workout
+  deleteExercise(id: Int!): Exercise
   deleteWorkout(id: Int!): Workout
   login(email: String!, password: String!): AuthPayload
   signup(email: String!, name: String, password: String!): AuthPayload
@@ -67,6 +71,5 @@ type Workout {
 }
 
 input WorkoutCreateInput {
-  content: String
   title: String!
 }
